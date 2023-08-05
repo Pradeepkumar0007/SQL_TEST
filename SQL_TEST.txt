@@ -1,0 +1,133 @@
+create database sql_test;
+use sql_test;
+
+-- Q1---
+
+
+SELECT TEAM_ID, COUNT(*) FROM PLAYER_MAST
+GROUP BY TEAM_ID;
+
+-- Q2
+-- # 2. From the following table, write a SQL query to find the number of matches that ended with a result. 
+
+
+SELECT RESULTS FROM MATCH_MAST
+WHERE RESULTS LIKE "%A";
+
+
+
+-- Q3
+-- # 3. From the following table, write a SQL query to find out when the Football EURO cup 2016 will begin. 
+-- use table match_mast 
+
+SELECT PLAY_DATE FROM MATCH_MAST
+ORDER BY PLAY_DATE DESC;
+
+
+-- Q4
+-- # 4. From the following table, write a SQL query to find out where the final match of the EURO cup 2016 was played. 
+-- Return venue name, city. 
+-- use tables: soccer_venue, soccer_city, match_mast 
+
+SELECT SV.VENUE_NAME, SC.CITY
+FROM SOCCER_VENUE AS SV
+JOIN
+SOCCER_CITY AS SC
+ON SV.CITY_ID=SC.ï»¿city_id;
+
+-- Q5
+# 5. From the following tables, write a SQL query to find the number of goals scored by each team in each match during normal play. 
+-- Return match number, country name and goal score. 
+-- use tables: match_details, soccer_country 
+
+SELECT * FROM MATCH_DETAILS;
+SELECT * FROM SOCCER_COUNTRY;
+
+SELECT MD.MATCH_NO, SC.COUNTRY_NAME, MD.GOAL_SCORE
+FROM MATCH_DETAILS AS MD
+CROSS JOIN
+SOCCER_COUNTRY AS SC;
+
+
+
+
+
+
+
+-- Q10
+# 10. Write a SQL query to find the players who scored goals in each match. 
+-- Group the result set on match number, country name and player name. 
+-- Sort the result-set in ascending order by match number. 
+-- Return match number, country name, player name and number of goals. 
+-- use tables goal_details, soccer_country, player_mast
+
+
+SELECT MATCH_NO, PLAYER_NAME,GOAL_ID , COUNT(*)
+-- PLAYER_NAME,GOAL_ID
+FROM GOAL_DETAILS AS GD
+JOIN 
+PLAYER_MAST AS PM
+ON GD.TEAM_ID = PM.TEAM_ID
+group by MATCH_NO, PLAYER_NAME, GOAL_ID
+ORDER BY MATCH_NO DESC;
+
+
+
+-- Q9
+-- # 9. From the following table, write a SQL query to find the highest audience match. 
+-- Return match_no, play_stage, goal_score, audience. 
+-- use table match_mast 
+
+SELECT MATCH_NO , PLAY_STAGE, GOAL_SCORE , AUDENCE 
+FROM MATCH_MAST
+ORDER BY AUDENCE
+LIMIT 1;
+
+
+-- Q8
+# 8. From the following table, write a SQL query to find out which teams played the first match of the 2016 Euro Cup. 
+-- Return match number, country name. 
+-- use tables match_details, soccer_country
+
+SELECT MD.MATCH_NO, SC.COUNTRY_NAME
+FROM MATCH_DETAILS AS MD
+CROSS JOIN
+SOCCER_COUNTRY SC
+ORDER BY MATCH_NO ASC
+LIMIT 1;
+
+
+-- Q7
+-- # 7. From the following table, write a SQL query to find out who scored the most goals in the 2016 Euro Cup. 
+-- Return player name, country name and highest individual scorer. 
+-- use tables: goal_details, player_mast, soccer_country 
+
+SELECT * FROM GOAL_DETAILS;
+SELECT * FROM PLAYER_MAST;
+SELECT * FROM SOCCER_COUNTRY;
+
+SELECT PM.PLAYER_NAME,GD.GOAL_ID 
+FROM GOAL_DETAILS AS GD
+JOIN
+PLAYER_MAST AS PM
+ON GD.TEAM_ID=PM.TEAM_ID
+ORDER BY GOAL_ID DESC;
+
+-- Q6
+-- # 6. From the following table, write a SQL query to count the number of goals scored by each player within a normal play schedule. 
+-- Group the result set on player name and country name and sorts the result-set according to the highest to the lowest scorer. 
+-- Return player name, number of goals and country name. 
+-- use tables: goal_details, player_mast, soccer_country
+
+SELECT * FROM GOAL_DETAILS;
+SELECT * FROM PLAYER_MAST;
+SELECT * FROM SOCCER_COUNTRY;
+
+SELECT PM.PLAYER_NAME, GD.GOAL_ID , SC.COUNTRY_NAME
+FROM PLAYER_MAST AS PM
+CROSS JOIN
+SOCCER_COUNTRY AS SC
+INNER JOIN 
+GOAL_DETAILS AS GD
+ON GD.TEAM_ID= PM.TEAM_ID;
+
